@@ -3,8 +3,8 @@
         <div class="kioskFrame">
             <div id="WaitForLogin" v-if="mode=='WaitForLogin'">
                 <div class="header">
-                    <button @click="$i18n.locale='sr';" class="langButton">Srpski</button>
-                    <button @click="$i18n.locale='en';" class="langButton">English</button>
+                    <button @click="changeLang('sr')" class="langButton">Srpski</button>
+                    <button @click="changeLang('en')" class="langButton">English</button>
                 </div>
                 <div class="center">
                     <img alt="Logo" class="logo" src="../assets/bikeLogo.png">
@@ -43,6 +43,11 @@
             if (!localStorage.getItem('stations')) {
                 localStorage.setItem('stations', JSON.stringify(this.stations));
             }
+
+            let allStations = JSON.parse(localStorage.getItem('stations'));
+            let lang = allStations[this.$route.params.id].lang;
+
+            this.$i18n.locale = lang;
         },
         methods: {
             login(userId) {
@@ -62,7 +67,14 @@
                 this.loggedUserName = "";
                 this.userCredit = 0;
                 this.mode = 'WaitForLogin';
-            }
+            },
+            changeLang(lang) {
+                this.$i18n.locale = lang;
+
+                let allStations = JSON.parse(localStorage.getItem('stations'));
+                allStations[this.$route.params.id].lang = lang;
+                localStorage.setItem('stations', JSON.stringify(allStations));
+            },
         },
         data: function () {
             return {
@@ -80,28 +92,51 @@
                         id: 1,
                         name: "Petar Petrović",
                         credit: 2400,
+                        currentlyRenting: false,
                     },
                     {
                         id: 2,
                         name: "Jovana Jovanović",
                         credit: 200,
+                        currentlyRenting: false,
                     },
                 ],
-                stations: {
-                    1: {
+                stations: [
+                    {
+                        name: 'Dummy Station',
+                        freebikes: 0,
+                        lang: 'sr'
+                    },
+                    {
                         name: 'Ada Ciganlija',
                         freebikes: 7,
+                        lang: 'sr'
                     },
-                    2: {
+                    {
                         name: 'Vukov Spomenik',
                         freebikes: 0,
+                        lang: 'sr'
                     },
-                    3: {
+                    {
                         name: 'Karaburma 1',
                         freebikes: 13,
+                        lang: 'sr'
                     }
-                }
+                ]
             }
+        },
+        beforeRouteUpdate(to, from, next) {
+            this.mode = "WaitForLogin";
+            this.loggedUserId = "";
+            this.loggedUserName = "";
+            this.userCredit = 0;
+
+            let allStations = JSON.parse(localStorage.getItem('stations'));
+            let lang = allStations[to.params.id].lang;
+
+            this.$i18n.locale = lang;
+
+            next();
         }
     }
 </script>
