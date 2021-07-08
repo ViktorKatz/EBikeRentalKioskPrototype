@@ -6,7 +6,7 @@ Vue.use(VueI18n);
 // We group this by a page or a component.
 const messages = {
     'sr': {
-        cardToLogin: "Prislonite karticu kako biste se ulogovali",
+        cardToLogin: "Ubacite karticu kako biste se ulogovali",
         welcome: "Dobrodošli",
         yourCredit: "Vaše stanje na računu"
     },

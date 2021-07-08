@@ -19,10 +19,11 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
+        margin-bottom: 0px;
     }
 
     #nav {
-        padding: 30px;
+        padding: 10px;
     }
 
         #nav a {

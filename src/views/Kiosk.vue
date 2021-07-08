@@ -16,10 +16,11 @@
                 <h1 style="text-align:left; margin-top:20px; margin-left:70px;"> {{ $t('yourCredit') }}: {{ userCredit }} RSD</h1>
             </div>
         </div>
-        <div class="kioskButtons" style="margin-top: 5px;">
+        <div class="kioskButtons">
             <div v-if="mode=='WaitForLogin'">
-                <button @click="login(1);"> Simuliraj ubacivanje kartice korisnika 1 </button>
-                <button @click="login(2);"> Simuliraj ubacivanje kartice korisnika 2 </button>
+                <div v-for="u in users" v-bind:key="u.id" v-if="u.id!=0" style="display:inline-block">
+                    <button v-on:click="login(u.id);"> Simuliraj ubacivanje kartice za {{u.name}} </button>
+                </div>
             </div>
             <div v-else>
                 <button @click="logout();"> Simuliraj izvlačenje kartice </button>
@@ -40,6 +41,8 @@
             if (!localStorage.getItem('users')) {
                 localStorage.setItem('users', JSON.stringify(this.users));
             }
+            this.users = JSON.parse(localStorage.getItem('users')); // sync
+
             if (!localStorage.getItem('stations')) {
                 localStorage.setItem('stations', JSON.stringify(this.stations));
             }
@@ -142,6 +145,10 @@
 </script>
 
 <style>
+    .kiosk {
+        margin-bottom: 0px;
+    }
+
     div.header {
         margin-top: 0px;
     }
@@ -158,9 +165,13 @@
     .kioskFrame {
         width: 800px;
         height: 600px;
-        border: 3px black solid;
+        border: 15px #555 solid;
+        border-top-color: #777;
+        border-left-color: #666;
+        border-bottom-color: #444;
         margin: auto;
         background-color: #9AF09D;
+        border-radius: 3%;
         /* Disable text selection */
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -168,6 +179,17 @@
         -moz-user-select: moz-none;
         -ms-user-select: none;
         user-select: none;
+    }
+
+    .kioskButtons {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: #666;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 0px;
+        width: 750px;
+        min-height: 50px;
     }
 
     .langButton {
@@ -179,6 +201,7 @@
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
+        margin-top: 10px;
         margin-left: 3px;
         margin-right: 3px;
     }
