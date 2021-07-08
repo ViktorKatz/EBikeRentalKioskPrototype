@@ -11,9 +11,31 @@
                     <h1>{{ $t('cardToLogin') }}</h1>
                 </div>
             </div>
-            <div id="UserHome" v-if="mode=='UserHome'">
-                <h1 style="text-align:left; margin-top:100px; margin-left:70px;"> {{ $t('welcome') }}, {{ loggedUserName }}!</h1>
-                <h1 style="text-align:left; margin-top:20px; margin-left:70px;"> {{ $t('yourCredit') }}: {{ userCredit }} RSD</h1>
+            <div id="UserHome" style="height:100%;" v-if="mode=='UserHome'">
+                <div>
+                    <h1 style="text-align:left; margin-top:100px; margin-left:70px;"> {{ $t('welcome') }}, {{ loggedUserName }}!</h1>
+                    <h1 style="text-align:left; margin-top:20px; margin-left:70px;"> {{ $t('yourCredit') }}: <span :style="userCredit<=0? 'color:red;' : '' ">{{ userCredit }} RSD</span></h1>
+                </div>
+                <div v-if="userCredit>0">
+                    <div v-if="users[loggedUserId].currentlyRenting==''">
+                        <button class="rentalButton" @click="rent('b')" :disabled="stations[$route.params.id].freebikes==0">{{ $t('rentBike') }} ({{ stations[$route.params.id].freebikes }})</button>
+                        <button class="rentalButton" @click="rent('m')" :disabled="stations[$route.params.id].freemopeds==0">{{ $t('rentMoped') }} ({{ stations[$route.params.id].freemopeds }})</button>
+                    </div>
+                    <div v-else>
+                        <button class="rentalButton" @click="unrent()">{{ $t('returnVehicle') }} (180 RSD)</button>
+                    </div>
+                </div>
+                <div v-else>
+                    <h1 style="color:red; width: 80%; margin:auto; margin-top:135px;"> {{ $t('pleaseDepositAtCentral') }} </h1>
+                </div>
+
+                <img alt="Logo" class="logoSmallBottom" src="../assets/bikeLogo.png">
+            </div>
+            <div v-if="mode=='PleaseRetrieveTheCard'">
+                <div class="center">
+                    <img alt="Logo" class="logo" src="../assets/bikeLogo.png">
+                    <h1>{{ $t('retrieveCard') }}</h1>
+                </div>
             </div>
         </div>
         <div class="kioskButtons">
@@ -46,6 +68,7 @@
             if (!localStorage.getItem('stations')) {
                 localStorage.setItem('stations', JSON.stringify(this.stations));
             }
+            this.stations = JSON.parse(localStorage.getItem('stations')); // sync
 
             let allStations = JSON.parse(localStorage.getItem('stations'));
             let lang = allStations[this.$route.params.id].lang;
@@ -78,6 +101,35 @@
                 allStations[this.$route.params.id].lang = lang;
                 localStorage.setItem('stations', JSON.stringify(allStations));
             },
+            rent(what) {
+                this.users[this.loggedUserId].currentlyRenting = what;
+                localStorage.setItem('users', JSON.stringify(this.users));
+
+                if (what == 'b') {
+                    this.stations[this.$route.params.id].freebikes -= 1;
+                }
+                else {
+                    this.stations[this.$route.params.id].freemopeds -= 1;
+                }
+                localStorage.setItem('stations', JSON.stringify(this.stations));
+
+                this.mode = "PleaseRetrieveTheCard";
+            },
+            unrent() {
+                if (this.users[this.loggedUserId].currentlyRenting == 'b') {
+                    this.stations[this.$route.params.id].freebikes += 1;
+                }
+                else {
+                    this.stations[this.$route.params.id].freemopeds += 1;
+                }
+                localStorage.setItem('stations', JSON.stringify(this.stations));
+
+                this.users[this.loggedUserId].currentlyRenting = '';
+                this.users[this.loggedUserId].credit -= 180;
+                localStorage.setItem('users', JSON.stringify(this.users));
+
+                this.mode = "PleaseRetrieveTheCard";
+            }
         },
         data: function () {
             return {
@@ -95,34 +147,38 @@
                         id: 1,
                         name: "Petar Petrović",
                         credit: 2400,
-                        currentlyRenting: false,
+                        currentlyRenting: '',
                     },
                     {
                         id: 2,
                         name: "Jovana Jovanović",
                         credit: 200,
-                        currentlyRenting: false,
+                        currentlyRenting: '',
                     },
                 ],
                 stations: [
                     {
                         name: 'Dummy Station',
                         freebikes: 0,
+                        freemopeds: 0,
                         lang: 'sr'
                     },
                     {
                         name: 'Ada Ciganlija',
                         freebikes: 7,
+                        freemopeds: 6,
                         lang: 'sr'
                     },
                     {
                         name: 'Vukov Spomenik',
                         freebikes: 0,
+                        freemopeds: 2,
                         lang: 'sr'
                     },
                     {
                         name: 'Karaburma 1',
                         freebikes: 13,
+                        freemopeds: 0,
                         lang: 'sr'
                     }
                 ]
@@ -138,6 +194,9 @@
             let lang = allStations[to.params.id].lang;
 
             this.$i18n.locale = lang;
+
+            this.users = JSON.parse(localStorage.getItem('users')); // sync
+            this.stations = JSON.parse(localStorage.getItem('stations')); // sync
 
             next();
         }
@@ -160,6 +219,12 @@
     img.logo {
         width: 300px;
         height: auto;
+    }
+
+    img.logoSmallBottom {
+        width: 150px;
+        height: auto;
+        margin-top: 85px;
     }
 
     .kioskFrame {
@@ -192,6 +257,24 @@
         min-height: 50px;
     }
 
+    .rentalButton {
+        background-color: #157A6E;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 32px;
+        margin-top: 120px;
+        margin-left: 3px;
+        margin-right: 3px;
+    }
+
+        .rentalButton:disabled {
+            background-color: #799c98;
+        }
+
     .langButton {
         background-color: #157A6E;
         border: none;
@@ -200,7 +283,7 @@
         text-align: center;
         text-decoration: none;
         display: inline-block;
-        font-size: 16px;
+        font-size: 20px;
         margin-top: 10px;
         margin-left: 3px;
         margin-right: 3px;

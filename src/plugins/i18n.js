@@ -8,7 +8,12 @@ const messages = {
     'sr': {
         cardToLogin: "Ubacite karticu kako biste se ulogovali",
         welcome: "Dobrodošli",
-        yourCredit: "Vaše stanje na računu"
+        yourCredit: "Vaše stanje na računu",
+        rentBike: "Iznajmi e-bicikl",
+        rentMoped: "Iznajmi moped",
+        retrieveCard: "Uspešno! Molimo izvadite karticu.",
+        returnVehicle: "Vrati vozilo",
+        pleaseDepositAtCentral: "Molimo uplatite kredit na šalteru da biste iznajmili vozilo",
     },
     'en': {
 
