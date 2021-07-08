@@ -12,7 +12,8 @@
                 </div>
             </div>
             <div id="UserHome" v-if="mode=='UserHome'">
-                asd
+                <h1 style="text-align:left; margin-top:100px; margin-left:70px;"> {{ $t('welcome') }}, {{ loggedUserName }}!</h1>
+                <h1 style="text-align:left; margin-top:20px; margin-left:70px;"> {{ $t('yourCredit') }}: {{ userCredit }} RSD</h1>
             </div>
         </div>
         <div class="kioskButtons" style="margin-top: 5px;">
@@ -21,7 +22,7 @@
                 <button @click="login(2);"> Simuliraj ubacivanje kartice korisnika 2 </button>
             </div>
             <div v-else>
-                <button @click="logout();"> Simuliraj izvlacenje kartice </button>
+                <button @click="logout();"> Simuliraj izvlačenje kartice </button>
             </div>
         </div>
     </div>
@@ -47,18 +48,28 @@
             login(userId) {
                 let users = JSON.parse(localStorage.getItem('users'));
                 localStorage.setItem('loggedUserId', userId);
+                this.loggedUserId = userId;
                 localStorage.setItem('loggedUserName', users[userId].name);
+                this.loggedUserName = users[userId].name;
+                this.userCredit = users[userId].credit;
+
                 this.mode = 'UserHome';
             },
             logout() {
                 localStorage.removeItem('loggedUserId');
+                this.loggedUserId = "";
                 localStorage.removeItem('loggedUserName');
+                this.loggedUserName = "";
+                this.userCredit = 0;
                 this.mode = 'WaitForLogin';
             }
         },
         data: function () {
             return {
                 mode: "WaitForLogin",
+                loggedUserId: "",
+                loggedUserName: "",
+                userCredit: 0,
                 users: [
                     {
                         id: 0,

@@ -7,6 +7,8 @@ Vue.use(VueI18n);
 const messages = {
     'sr': {
         cardToLogin: "Prislonite karticu kako biste se ulogovali",
+        welcome: "Dobrodošli",
+        yourCredit: "Vaše stanje na računu"
     },
     'en': {
 
