@@ -10,6 +10,7 @@
                     <img alt="Logo" class="logo" src="../assets/bikeLogo.png">
                     <h1>{{ $t('cardToLogin') }}</h1>
                 </div>
+                <h2 style="margin-top:120px">Beo-E-Bike: {{stations[$route.params.id].name}}</h2>
             </div>
             <div id="UserHome" style="height:100%;" v-if="mode=='UserHome'">
                 <div>
@@ -258,6 +259,7 @@
     }
 
     .rentalButton {
+        border-radius: 4%;
         background-color: #157A6E;
         border: none;
         color: white;
@@ -276,6 +278,7 @@
         }
 
     .langButton {
+        border-radius: 7%;
         background-color: #157A6E;
         border: none;
         color: white;
