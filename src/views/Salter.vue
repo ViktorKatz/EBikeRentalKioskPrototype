@@ -20,13 +20,15 @@
                 <h5> Unesite ID korisnika sa njegove kartice i uplaćenu sumu </h5>
                 <form>
                     <label for="uplataID">ID: </label>
-                    <input type="number" id="uplataID" name="uplataID" v-model="uplataID">
+                    <input min="1" @input="updateUplataName()" type="number" id="uplataID" name="uplataID" v-model="uplataID">
+                    <span> {{ uplataNameById }} </span>
                     <label for="uplataNovac"> &nbsp;&nbsp; Novac za uplatu: </label>
-                    <input type="number" id="uplataNovac" name="uplataNovac" v-model="uplataNovac">
+                    <input min="1" max="5000" type="number" id="uplataNovac" name="uplataNovac" v-model="uplataNovac">
+                    <span>RSD</span>
                 </form>
                 <span :style="'color:'+uplataMsgColor"> {{uplataMsg}} </span>
                 <br>
-                <button @click="uplata()">Uplati</button>
+                <button :disabled="uplataDisabled" @click="uplata()">Uplati</button>
                 <hr />
 
                 <h2> Brisanje korisnika iz sistema </h2>
@@ -77,6 +79,43 @@
                 this.regUsername = "";
                 this.regMsg = "Uspešno registrovan korisnik " + newUser.name + " sa ID-jem kartice " + newUser.id;
                 this.regMsgColor = "green";
+            },
+            updateUplataName() {
+                let targetUser = this.users.find(u => u.id == this.uplataID);
+                targetUser = this.upladaID == 0 ? null : targetUser;
+                this.uplataNameById = targetUser ? "(" + targetUser.name + ")" : "(Nepostojeći korisnik)";
+                this.uplataDisabled = targetUser ? false : true;
+            },
+            uplata() {
+                if (!(this.uplataID && this.uplataNovac)) {
+                    this.uplataMsg = "Morate uneti ID korisnika i novac za uplatu!";
+                    this.uplataMsgColor = "red";
+                    return;
+                };
+
+                let upl = parseInt(this.uplataNovac);
+                if (upl == 0) {
+                    this.uplataMsg = "Ne možete uplatiti 0 dinara!";
+                    this.uplataMsgColor = "red";
+                    return;
+                };
+
+                for (let i = 0; i < this.users.length; ++i) {
+                    if (this.users[i].id == this.uplataID) {
+                        this.users[i].credit += upl;
+                        this.uplataMsg = "Uspešno uplaćeno " + upl + " za korisnika " + this.users[i].name + "(ID:" + this.users[i].id + ")." + "Trenutno stanje na računu iznosi " + this.users[i].credit + "RSD.";
+                        this.uplataMsgColor = "green";
+
+                        this.uplataID= null;
+                        this.uplataNovac = 0;
+                        this.uplataNameById = "";
+
+                        break;
+                    }
+                }
+
+
+                localStorage.setItem('users', JSON.stringify(this.users));
             }
         },
         data: function () {
@@ -89,6 +128,8 @@
                 uplataNovac: 0,
                 uplataMsg: "",
                 uplataMsgColor: "",
+                uplataNameById: "",
+                uplataDisabled: true,
 
                 users: [
                     {
