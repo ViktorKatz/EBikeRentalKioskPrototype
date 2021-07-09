@@ -1,8 +1,8 @@
-<template>
+﻿<template>
     <div id="app">
         <div id="nav">
             <router-link to="/">Home</router-link> |
-            <router-link to="/about">About</router-link> |
+            <router-link to="/salter">Šalter</router-link> |
             <router-link to="/kiosk/1">Stanica na Adi</router-link> |
             <router-link to="/kiosk/2">Stanica kod Vukovog spomenika</router-link> |
             <router-link to="/kiosk/3">Stanica na Karaburmi</router-link> |
