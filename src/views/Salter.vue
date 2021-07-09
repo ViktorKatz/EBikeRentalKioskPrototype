@@ -4,11 +4,31 @@
             <div id="prozor">
                 <h1>Dobrodošli u program za administraciju Beo-E-Bike</h1>
                 <hr />
+
                 <h2> Registracija novog korisnika</h2>
-                <h5> Unesite korisničko ime novog korisnika </h5>
+                <h5> Unesite ime i prezime novog korisnika </h5>
+                <form>
+                    <label for="regUsername">Ime i prezime: </label>
+                    <input id="regUsername" name="regUsername" v-model="regUsername">
+                </form>
+                <span :style="'color:'+regMsgColor"> {{regMsg}} </span>
+                <br>
+                <button @click="register()">Registruj korisnika</button>
                 <hr />
+
                 <h2> Doplaćivanje kredita na nalog </h2>
+                <h5> Unesite ID korisnika sa njegove kartice i uplaćenu sumu </h5>
+                <form>
+                    <label for="uplataID">ID: </label>
+                    <input type="number" id="uplataID" name="uplataID" v-model="uplataID">
+                    <label for="uplataNovac"> &nbsp;&nbsp; Novac za uplatu: </label>
+                    <input type="number" id="uplataNovac" name="uplataNovac" v-model="uplataNovac">
+                </form>
+                <span :style="'color:'+uplataMsgColor"> {{uplataMsg}} </span>
+                <br>
+                <button @click="uplata()">Uplati</button>
                 <hr />
+
                 <h2> Brisanje korisnika iz sistema </h2>
             </div>
         </div>
@@ -34,8 +54,42 @@
             }
             this.stations = JSON.parse(localStorage.getItem('stations')); // sync
         },
+        methods: {
+            register() {
+                if (this.regUsername == '') {
+                    this.regMsg = "Morate uneti ime i prezime novog korisnika";
+                    this.regMsgColor = "red";
+                }
+
+                let allIds = this.users.map(u => u.id);
+                let maxId = allIds.reduce((id1, id2) => (Math.max(id1, id2)));
+                let newId = maxId + 1;
+                let newUser = {
+                    id: newId,
+                    name: this.regUsername,
+                    credit: 0,
+                    currentlyRenting: '',
+                }
+
+                this.users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(this.users));
+
+                this.regUsername = "";
+                this.regMsg = "Uspešno registrovan korisnik " + newUser.name + " sa ID-jem kartice " + newUser.id;
+                this.regMsgColor = "green";
+            }
+        },
         data: function () {
             return {
+                regUsername: "",
+                regMsg: "",
+                regMsgColor: "",
+
+                uplataID: null,
+                uplataNovac: 0,
+                uplataMsg: "",
+                uplataMsgColor: "",
+
                 users: [
                     {
                         id: 0,
