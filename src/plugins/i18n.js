@@ -6,7 +6,7 @@ Vue.use(VueI18n);
 // We group this by a page or a component.
 const messages = {
     'sr': {
-        cardToLogin: "Ubacite karticu kako biste se ulogovali",
+        cardToLogin: "Molimo, ubacite karticu",
         welcome: "Dobrodošli",
         yourCredit: "Vaše stanje na računu",
         rentBike: "Iznajmi e-bicikl",
@@ -16,7 +16,14 @@ const messages = {
         pleaseDepositAtCentral: "Molimo uplatite kredit na šalteru da biste iznajmili vozilo",
     },
     'en': {
-
+        cardToLogin: "Please insert your card",
+        welcome: "Welcome",
+        yourCredit: "Your credit",
+        rentBike: "Rent an e-bike",
+        rentMoped: "Rent a moped",
+        retrieveCard: "Success! Please retrieve your card.",
+        returnVehicle: "Return the vehicle",
+        pleaseDepositAtCentral: "Please make a deposit at the counter to rent a vehicle",
     }
 };
 
