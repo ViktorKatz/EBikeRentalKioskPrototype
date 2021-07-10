@@ -93,6 +93,7 @@
             updateUplataName() {
                 let targetUser = this.users.find(u => u.id == this.uplataID);
                 targetUser = this.upladaID == 0 ? null : targetUser;
+                targetUser = targetUser && targetUser.id == 0 ? null : targetUser;
                 this.uplataNameById = targetUser ? "(" + targetUser.name + ")" : "(Nepostojeći korisnik)";
                 this.uplataDisabled = targetUser ? false : true;
             },
@@ -146,7 +147,8 @@
             },
             updateBrisanjeName() {
                 let targetUser = this.users.find(u => u.id == this.brisanjeID);
-                targetUser = this.upladaID == 0 ? null : targetUser;
+                targetUser = this.brisanjeID == 0 ? null : targetUser;
+                targetUser = targetUser && targetUser.id == 0 ? null : targetUser;
                 this.brisanjeNameById = targetUser ? "(" + targetUser.name + ")" : "(Nepostojeći korisnik)";
                 this.brisanjeDisabled = targetUser ? false : true;
             },
@@ -244,7 +246,7 @@
     #postolje {
         padding-top: 20px;
         padding-bottom: 20px;
-        background-color: #666;
+        background-color: #555;
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 0px;
