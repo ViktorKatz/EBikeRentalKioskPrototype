@@ -32,6 +32,16 @@
                 <hr />
 
                 <h2> Brisanje korisnika iz sistema </h2>
+                <h5> Unesite ID korisnika za brisanje </h5>
+                <form>
+                    <label for="brisanjeID">ID: </label>
+                    <input min="1" @input="updateBrisanjeName()" type="number" id="brisanjeID" name="brisanjeID" v-model="brisanjeID">
+                    <span> {{ brisanjeNameById }} </span>
+                </form>
+                <span :style="'color:'+brisanjeMsgColor"> {{brisanjeMsg}} </span>
+                <br>
+                <button :disabled="brisanjeDisabled" @click="brisanje()">Obriši</button>
+                <hr />
             </div>
         </div>
         <div id="postolje" />
@@ -106,7 +116,7 @@
                         this.uplataMsg = "Uspešno uplaćeno " + upl + " za korisnika " + this.users[i].name + "(ID:" + this.users[i].id + ")." + "Trenutno stanje na računu iznosi " + this.users[i].credit + "RSD.";
                         this.uplataMsgColor = "green";
 
-                        this.uplataID= null;
+                        this.uplataID = null;
                         this.uplataNovac = 0;
                         this.uplataNameById = "";
 
@@ -114,9 +124,32 @@
                     }
                 }
 
+                localStorage.setItem('users', JSON.stringify(this.users));
+            },
+            brisanje() {
+                if (!(this.brisanjeID)) {
+                    this.brisanjeaMsg = "Morate uneti ID korisnika za brisanje!";
+                    this.brisanjeMsgColor = "red";
+                    return;
+                };
+
+                this.users = this.users.filter(u => u.id != this.brisanjeID)
 
                 localStorage.setItem('users', JSON.stringify(this.users));
-            }
+
+                this.brisanjeMsg = "Uspešno obrisan korisnik sa ID-jem " + this.brisanjeID + ".";
+                this.brisanjeMsgColor = "green";
+
+                this.brisanjeID = null;
+                this.brisanjeNameById = "";
+                this.brisanjeDisabled = true;
+            },
+            updateBrisanjeName() {
+                let targetUser = this.users.find(u => u.id == this.brisanjeID);
+                targetUser = this.upladaID == 0 ? null : targetUser;
+                this.brisanjeNameById = targetUser ? "(" + targetUser.name + ")" : "(Nepostojeći korisnik)";
+                this.brisanjeDisabled = targetUser ? false : true;
+            },
         },
         data: function () {
             return {
@@ -130,6 +163,12 @@
                 uplataMsgColor: "",
                 uplataNameById: "",
                 uplataDisabled: true,
+
+                brisanjeID: null,
+                brisanjeMsg: "",
+                brisanjeMsgColor: "",
+                brisanjeNameById: "",
+                brisanjeDisabled: true,
 
                 users: [
                     {
