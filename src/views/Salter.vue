@@ -42,6 +42,8 @@
                 <br>
                 <button :disabled="brisanjeDisabled" @click="brisanje()">Obriši</button>
                 <hr />
+                <h1>Pregled lokacija iznajmljenih vozila</h1>
+                <img alt="MapWithBikes" class="map" src="../assets/MapWithBikes.png">
             </div>
         </div>
         <div id="postolje" />
@@ -261,5 +263,9 @@
         margin-bottom: 0px;
         width: 250px;
         height: 15px;
+    }
+
+    .map {
+        max-width: 85%;
     }
 </style>
