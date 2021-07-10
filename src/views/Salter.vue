@@ -118,6 +118,7 @@
                         this.users[i].credit += upl;
                         this.uplataMsg = "Uspešno uplaćeno " + upl + " za korisnika " + this.users[i].name + "(ID:" + this.users[i].id + ")." + "Trenutno stanje na računu iznosi " + this.users[i].credit + "RSD.";
                         this.uplataMsgColor = "green";
+                        this.uplataDisabled = true;
 
                         this.uplataID = null;
                         this.uplataNovac = 0;
