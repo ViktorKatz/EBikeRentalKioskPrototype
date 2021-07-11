@@ -1,7 +1,7 @@
 ﻿<template>
     <div id="app">
         <div id="nav">
-            <router-link to="/">Home</router-link> |
+            <router-link to="/">Uputstvo za upotrebu prototipa</router-link> |
             <router-link to="/salter">Šalter (u ulozi zaposlenog)</router-link> |
             <router-link to="/kiosk/1">Stanica na Adi</router-link> |
             <router-link to="/kiosk/2">Stanica kod Vukovog spomenika</router-link> |
