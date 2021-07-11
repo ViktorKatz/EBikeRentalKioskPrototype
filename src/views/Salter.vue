@@ -6,10 +6,15 @@
                 <hr />
 
                 <h2> Registracija novog korisnika</h2>
-                <h5> Unesite ime i prezime novog korisnika </h5>
+                <h5> Unesite ime i prezime novog korisnika, kao i kategoriju </h5>
                 <form>
                     <label for="regUsername">Ime i prezime: </label>
                     <input id="regUsername" name="regUsername" v-model="regUsername">
+                    <select>
+                        <option>Običan korisnik</option>
+                        <option>Maloletan korisnik</option>
+                        <option>Strani državljanin</option>
+                    </select>
                 </form>
                 <span :style="'color:'+regMsgColor"> {{regMsg}} </span>
                 <br>
